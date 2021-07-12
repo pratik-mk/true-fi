@@ -31,13 +31,13 @@ export const SignUp: React.FC<Props> = (props) => {
             </div>
             <h1>Sign Up</h1>
             <div>
-                <TextField id="outlined-basic" label="Email" variant="outlined" />
+                <TextField type="email" label="Email" variant="outlined" />
             </div>
             <div>
-                <TextField id="outlined-basic" label="Password" variant="outlined" />
+                <TextField label="Password" variant="outlined" />
             </div>
             <div>
-                <TextField id="standard-error-helper-text" label="Confirm Password" variant="outlined" />
+                <TextField label="Confirm Password" variant="outlined" />
             </div><div>
                 <Button variant="contained" color="primary">Submit</Button>
             </div>
