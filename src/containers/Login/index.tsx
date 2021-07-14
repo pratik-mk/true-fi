@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -24,6 +23,11 @@ function Copyright() {
       {'.'}
     </Typography>
   );
+}
+
+function validateEmail(email: string) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email)
 }
 
 const useStyles = makeStyles((theme) => ({
@@ -48,35 +52,38 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login() {
   const classes = useStyles();
-  const [email,setEmail] = useState('');
-  const [password,setPassword] = useState('');
-  const [errors, setErrors] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailError, setEmailError] = useState(false);
 
-  const handleSubmit = async (): Promise<void> => {
-    if(email === 'qwerty')
-    {
-        console.log('email cannot be empty')
-        setErrors(true);
-        console.log(errors)
+  const handleValidation = () => {
+    let validateFlag = true;
+    if (validateEmail(email)) {
+      setEmailError(false);
     }
-    else if(password==='')
-    {
-        console.log('password cannot be empty')
+    else {
+      setEmailError(true);
+      validateFlag = false
     }
-    console.log('email: ',email)
-    console.log('password: ',password)
-    try {
-      const res = await login({email, password});
-      let date = new Date();
-      date.setSeconds(date.getSeconds() + res.expiresIn)
-      const tokenObj = {
+    return validateFlag
+  }
+
+  const handleSubmit = async (event: React.SyntheticEvent): Promise<void> => {
+    event.preventDefault();
+    if (handleValidation()) {
+      try {
+        const res = await login({ email, password });
+        let date = new Date();
+        date.setSeconds(date.getSeconds() + res.expiresIn)
+        const tokenObj = {
           accessToken: res.accessToken,
           refreshToken: res.refreshToken,
           expiresIn: date.getTime()
-      };
-    }
-    catch(err) {
-      console.log(err);
+        };
+      }
+      catch (err) {
+        console.log(err);
+      }
     }
   };
 
@@ -104,7 +111,7 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
-            {...(errors && {error:true, helperText: 'cannot be blank'})}
+            {...(emailError && {error:true, helperText: 'email is not valid'})}
           />
           <TextField
             value = {password}
@@ -118,7 +125,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-            {...(errors && {error:true, helperText: 'cannot be blank'})}
+            // {...(errors && {error:true, helperText: 'cannot be blank'})}
           />
           <Button
             type="submit"
@@ -129,18 +136,14 @@ export default function Login() {
           >
             Sign In
           </Button>
-          <Grid container>
-            <Grid item>
-              <Link href={SIGNUP} variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
+          <Link href={SIGNUP} variant="body2">
+          {"Don't have an account? Sign Up"}
+        </Link>
         </form>
       </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+    <Box mt={3}>
+      <Copyright />
+    </Box>
+    </Container >
   );
 }
