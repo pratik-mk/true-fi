@@ -2,8 +2,8 @@ import React from 'react';
 import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
-import SignUp from './components/Signup';
-import Login from './components/Login';
+import SignUp from './containers/Signup';
+import Login from './containers/Login';
 import { LOGIN, SIGNUP } from './constants/routes';
 import { checkIfAccesstokenIsValid } from './utils';
 
