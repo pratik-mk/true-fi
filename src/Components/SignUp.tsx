@@ -3,10 +3,7 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +22,10 @@ function Copyright() {
     </Typography>
   );
 }
+function validateEmail(email : string) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email)
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.main,
   },
   form: {
-    width: '100%', // Fix IE 11 issue.
+    width: '100%',
     marginTop: theme.spacing(1),
   },
   submit: {
@@ -51,18 +52,39 @@ export default function SignUp() {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [repassword,setRepassword] = useState('');
-  const [errors, setErrors] = useState(false);
+  //const [helptext,setHelptext] = useState('');
+  const [passwordError, setPasswordError] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if(password !== repassword)
+    if(password === repassword)
     {
-        console.log('Password didnt match')
-        setErrors(true);
-        console.log(errors)
+      console.log('password matched');
+      setPasswordError(false)
     }
-    console.log('email: ',email)
-    console.log('password: ',password)
+    else{
+      setPasswordError(true);
+      console.log('password not matched');
+      //setHelptext('Password didnt match')
+    }
+    if(password.length >= 4){
+      console.log('pasword is more than 4 character')
+      setPasswordError(false);
+    }
+    else{
+      setPasswordError(true);
+      console.log('password length should be more than 4')
+      //setHelptext('Password should be more than 4 character');
+    }
+    if(validateEmail(email)){
+      setEmailError(false);
+      console.log('email is valid')
+    }
+    else{
+      setEmailError(true);
+      console.log('email is not valid')
+    }
   };
 
   return (
@@ -88,7 +110,7 @@ export default function SignUp() {
             name="email"
             autoComplete="email"
             autoFocus
-            // {...(errors && {error:true, helperText: 'cannot be blank'})}
+            {...(emailError && {error:true, helperText: 'Please enter a valid email'})}
           />
           <TextField
             value = {password}
@@ -101,7 +123,7 @@ export default function SignUp() {
             label="Password"
             type="password"
             autoComplete="current-password"
-            {...(errors && {error:true, helperText: 'Password didnt match'})}
+            {...(passwordError && {error:true, helperText: 'Password not matched & Password should be 4 character long '})}
           />
           <TextField
             value = {repassword}
@@ -114,11 +136,7 @@ export default function SignUp() {
             label="Confirm Password"
             type="password"
             autoComplete="current-password"
-            {...(errors && {error:true, helperText: 'Password didnt match'})}
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            {...(passwordError && {error:true, helperText: 'Password not matched & Password should be 4 character long '})}
           />
           <Button
             type="submit"
@@ -129,21 +147,12 @@ export default function SignUp() {
           >
             Sign Up
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Already have an account? Sign in"}
-              </Link>
-            </Grid>
-          </Grid>
+          <Link href="#" variant="body2">
+            {"Already have an account? Sign in"}
+          </Link>
         </form>
       </div>
-      <Box mt={8}>
+      <Box mt={2}>
         <Copyright />
       </Box>
     </Container>
