@@ -23,6 +23,11 @@ function Copyright() {
   );
 }
 
+function validateEmail(email : string) {
+  const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email)
+}
+
 const useStyles = makeStyles((theme) => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -47,19 +52,18 @@ export default function Login() {
   const classes = useStyles();
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
-  const [errors, setErrors] = useState(false);
+  const [emailError, setEmailError] = useState(false);
 
   const handleSubmit = (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if(email === 'qwerty')
-    {
-        console.log('email cannot be empty')
-        setErrors(true);
-        console.log(errors)
+
+    if(validateEmail(email)){
+      setEmailError(false);
+      console.log('email is valid')
     }
-    else if(password==='')
-    {
-        console.log('password cannot be empty')
+    else{
+      setEmailError(true);
+      console.log('email is not valid')
     }
     console.log('email: ',email)
     console.log('password: ',password)
@@ -89,7 +93,7 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
-            {...(errors && {error:true, helperText: 'cannot be blank'})}
+            {...(emailError && {error:true, helperText: 'email is not valid'})}
           />
           <TextField
             value = {password}
@@ -103,7 +107,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-            {...(errors && {error:true, helperText: 'cannot be blank'})}
+            // {...(errors && {error:true, helperText: 'cannot be blank'})}
           />
           <Button
             type="submit"
