@@ -4,6 +4,7 @@ import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
 import SignUp from './containers/Signup';
 import Login from './containers/Login';
+import Header from './components/Header';
 import { LOGIN, SIGNUP } from './constants/routes';
 import { checkIfAccesstokenIsValid } from './utils';
 
@@ -11,6 +12,7 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
+        <Header />
         <Switch>
           <Redirect path="/" exact to={LOGIN} />
           {!checkIfAccesstokenIsValid() && (
