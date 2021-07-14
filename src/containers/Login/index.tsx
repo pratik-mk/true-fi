@@ -73,6 +73,7 @@ export default function Login() {
     if (handleValidation()) {
       try {
         const res = await login({ email, password });
+        console.log(res)
         let date = new Date();
         date.setSeconds(date.getSeconds() + res.expiresIn)
         const tokenObj = {
@@ -99,9 +100,9 @@ export default function Login() {
         </Typography>
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
-            value = {email}
-            type= 'email'
-            onChange = {(e) => setEmail(e.target.value)}
+            value={email}
+            type='email'
+            onChange={(e) => setEmail(e.target.value)}
             variant="outlined"
             margin="normal"
             required
@@ -111,11 +112,11 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
-            {...(emailError && {error:true, helperText: 'email is not valid'})}
+            {...(emailError && { error: true, helperText: 'email is not valid' })}
           />
           <TextField
-            value = {password}
-            onChange= {(e) => setPassword(e.target.value)}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             variant="outlined"
             margin="normal"
             required
@@ -125,7 +126,7 @@ export default function Login() {
             type="password"
             id="password"
             autoComplete="current-password"
-            // {...(errors && {error:true, helperText: 'cannot be blank'})}
+          // {...(errors && {error:true, helperText: 'cannot be blank'})}
           />
           <Button
             type="submit"
@@ -137,13 +138,13 @@ export default function Login() {
             Sign In
           </Button>
           <Link href={SIGNUP} variant="body2">
-          {"Don't have an account? Sign Up"}
-        </Link>
+            {"Don't have an account? Sign Up"}
+          </Link>
         </form>
       </div>
-    <Box mt={3}>
-      <Copyright />
-    </Box>
+      <Box mt={3}>
+        <Copyright />
+      </Box>
     </Container >
   );
 }
