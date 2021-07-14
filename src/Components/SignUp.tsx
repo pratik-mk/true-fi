@@ -52,7 +52,7 @@ export default function SignUp() {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [repassword,setRepassword] = useState('');
-  //const [helptext,setHelptext] = useState('');
+  const [helptext,setHelptext] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [emailError, setEmailError] = useState(false);
 
@@ -62,20 +62,22 @@ export default function SignUp() {
     {
       console.log('password matched');
       setPasswordError(false)
+      setHelptext('')
+      if(password.length >= 4){
+        console.log('pasword is more than 4 character')
+        setPasswordError(false);
+        setHelptext('')
+      }
+      else{
+        setPasswordError(true);
+        console.log('password length should be more than 4')
+        setHelptext('Password should be more than 4 character !!!');
+      }
     }
     else{
       setPasswordError(true);
       console.log('password not matched');
-      //setHelptext('Password didnt match')
-    }
-    if(password.length >= 4){
-      console.log('pasword is more than 4 character')
-      setPasswordError(false);
-    }
-    else{
-      setPasswordError(true);
-      console.log('password length should be more than 4')
-      //setHelptext('Password should be more than 4 character');
+      setHelptext('Password didnt match')
     }
     if(validateEmail(email)){
       setEmailError(false);
@@ -123,7 +125,9 @@ export default function SignUp() {
             label="Password"
             type="password"
             autoComplete="current-password"
-            {...(passwordError && {error:true, helperText: 'Password not matched & Password should be 4 character long '})}
+            helperText= {helptext}
+            {...(passwordError && {error:true})}
+            //{...(passwordError && {error:true, helperText: 'password didnt match and password should be more than 4 character'})}
           />
           <TextField
             value = {repassword}
@@ -136,7 +140,8 @@ export default function SignUp() {
             label="Confirm Password"
             type="password"
             autoComplete="current-password"
-            {...(passwordError && {error:true, helperText: 'Password not matched & Password should be 4 character long '})}
+            helperText= {helptext}
+            {...(passwordError && {error:true})}
           />
           <Button
             type="submit"
