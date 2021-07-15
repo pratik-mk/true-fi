@@ -9,8 +9,11 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { SIGNUP } from '../../constants/routes';
-import { login } from '../../services/api';
+import { DASHBOARD, SIGNUP } from '../../constants/routes';
+import { login } from '../../services/Api/authuser';
+import { TOKEN } from '../../constants/text';
+import { setItemInLocalStorage } from '../../utils/localstorage';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -50,11 +53,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Login() {
+type LoginProps = {
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Login: React.FC<LoginProps> = (props): JSX.Element => {
   const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
+
+  const history = useHistory();
+  const { setLoggedIn } = props;
 
   const handleValidation = () => {
     let validateFlag = true;
@@ -73,7 +83,6 @@ export default function Login() {
     if (handleValidation()) {
       try {
         const res = await login({ email, password });
-        console.log(res)
         let date = new Date();
         date.setSeconds(date.getSeconds() + res.expiresIn)
         const tokenObj = {
@@ -81,6 +90,9 @@ export default function Login() {
           refreshToken: res.refreshToken,
           expiresIn: date.getTime()
         };
+        setLoggedIn(true);
+        setItemInLocalStorage(TOKEN, JSON.stringify(tokenObj));
+        history.push(DASHBOARD);
       }
       catch (err) {
         console.log(err);
@@ -148,3 +160,5 @@ export default function Login() {
     </Container >
   );
 }
+
+export default Login

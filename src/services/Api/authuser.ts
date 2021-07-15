@@ -1,14 +1,14 @@
 import { AxiosResponse } from 'axios';
 
-import axios from "./instance";
-import { LoginRequestInterface } from '../interfaces/LoginRequestInterface';
-import { LoginResponseInterface } from '../interfaces/LoginResponseInterface';
+import axios from "../instance";
+import { LoginRequestInterface, LoginResponseInterface } from '../../interfaces/LoginInterface';
+import { SignupRequestInterface } from '../../interfaces/SignupInterface';
 
-export const signup = (data: LoginRequestInterface): Promise<LoginResponseInterface> => {
+export const signup = (data: SignupRequestInterface): Promise<AxiosResponse<void>> => {
   return new Promise(async (resolve, reject) => {
     try {
       const res = await axios.post(
-        'auth/signup',
+        'users',
         data
       );
       resolve(res.data);
@@ -22,10 +22,9 @@ export const signup = (data: LoginRequestInterface): Promise<LoginResponseInterf
 export const login = (data: LoginRequestInterface): Promise<LoginResponseInterface> => {
   return new Promise(async (resolve, reject) => {
     try {
-      const res = await axios.get(
-      'users?page=1&perPage=10'
-      // 'auth/login',
-      // data
+      const res = await axios.post(
+        'auth/login',
+        data
       );
       resolve(res.data);
     }

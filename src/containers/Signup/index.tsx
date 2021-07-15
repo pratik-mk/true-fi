@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import FormHelperText from '@material-ui/core/FormHelperText';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,8 +10,9 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { signup } from '../../services/api';
+import { signup } from '../../services/Api/authuser';
 import { LOGIN } from '../../constants/routes';
+import { useHistory } from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -24,6 +26,7 @@ function Copyright() {
     </Typography>
   );
 }
+
 function validateEmail(email: string) {
   const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(email)
@@ -51,12 +54,16 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [repassword, setRepassword] = useState('');
   const [helptext, setHelptext] = useState('');
   const [passwordError, setPasswordError] = useState(false);
   const [emailError, setEmailError] = useState(false);
+  const [formError, setFormError] = useState('');
+
+  const history = useHistory();
 
   const handleValidation = () => {
     let validateFlag = true
@@ -92,17 +99,12 @@ export default function SignUp() {
     event.preventDefault();
     if (handleValidation()) {
       try {
-        const res = await signup({ email, password });
-        let date = new Date();
-        date.setSeconds(date.getSeconds() + res.expiresIn)
-        const tokenObj = {
-          accessToken: res.accessToken,
-          refreshToken: res.refreshToken,
-          expiresIn: date.getTime()
-        };
+        const res = await signup({ name, email, password });
+        history.push(LOGIN);
       }
       catch (err) {
         console.log(err);
+        setFormError(err.response.data.message);
       }
     }
   };
@@ -117,7 +119,23 @@ export default function SignUp() {
         <Typography component="h1" variant="h5">
           Sign Up
         </Typography>
+        <FormHelperText component="p" error={true}>
+          {formError}
+        </FormHelperText>
         <form className={classes.form} onSubmit={handleSubmit}>
+          <TextField
+            value={name}
+            type='text'
+            onChange={(e) => setName(e.target.value)}
+            variant="outlined"
+            margin="normal"
+            required
+            fullWidth
+            label="Name"
+            name="name"
+            autoComplete="name"
+            autoFocus
+          />
           <TextField
             value={email}
             type='email'

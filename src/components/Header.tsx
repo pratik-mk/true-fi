@@ -1,5 +1,11 @@
 import { AppBar, Button, IconButton, makeStyles, Toolbar, Typography } from "@material-ui/core";
 //import MenuIcon from '@material-ui/icons/Menu';
+import { useHistory } from 'react-router-dom';
+import { LOGIN } from "../constants/routes";
+import { TOKEN } from "../constants/text";
+import { logout } from "../services/Api/authuser"
+import { removeItemFromLocalStorage } from "../utils/localstorage";
+import logo from '../assets/logo.svg'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -13,21 +19,46 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Header() {
+type HeaderProps = {
+  isLoggedIn: boolean;
+  setLoggedIn: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+const Header: React.FC<HeaderProps> = (props): JSX.Element => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const { isLoggedIn, setLoggedIn } = props;
+
+  const handleClick = async (event: React.SyntheticEvent): Promise<void> => {
+    event.preventDefault();
+    try {
+      await logout();
+    }
+    catch (err) {
+      console.log(err);
+    }
+    finally {
+      removeItemFromLocalStorage(TOKEN);
+      setLoggedIn(false);
+      history.push(LOGIN);
+    }
+  }
 
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <IconButton edge="start" color="inherit" aria-label="menu">
-            <img src='https://dev-lender-portal.netlify.app/static/media/logo.c44faacb.svg' alt="true-fi"></img>
+            <img src={logo} alt="truefi"></img>
           </IconButton>
           <Typography variant="h6" className={classes.title}>
           </Typography>
-          <Button color="inherit">Login</Button>
+          {isLoggedIn ? <Button name="logout" color="inherit" onClick={handleClick}>Logout</Button> : <Button name="login" color="inherit" onClick={() => { history.push(LOGIN) }}>Login</Button>}
         </Toolbar>
       </AppBar>
     </div>
   );
 }
+
+export default Header
