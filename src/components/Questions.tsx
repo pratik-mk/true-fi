@@ -15,6 +15,7 @@ import {
   RadioGroup,
   TextField,
 } from "@material-ui/core";
+import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 function LinearProgressWithLabel(
@@ -40,7 +41,18 @@ const useStyles = makeStyles({
     margin: "20px",
   },
   questionCard: {
-    minWidth: 275,
+    textAlign: "left",
+    margin: "10px",
+    borderStyle: "ridge",
+    marginTop: "50px",
+  },
+  answerBorder: {
+    width: "100%",
+    borderStyle: "none",
+    backgroundColor: "#000",
+    color: "#fff",
+    opacity: 0.5,
+    margin: "2px",
   },
   bullet: {
     display: "inline-block",
@@ -52,6 +64,7 @@ const useStyles = makeStyles({
   },
   pos: {
     marginBottom: 12,
+    marginLeft: "20px",
   },
 });
 
@@ -71,28 +84,29 @@ export default function Questions() {
   }, []);
 
   return (
-    //style={{backgroundColor: '#e8efff'}}
     <Container fixed>
       <div className={classes.progressBar}>
         <LinearProgressWithLabel value={progress} />
       </div>
-      <Card className={classes.questionCard} style={{ marginTop: "50px" }}>
+      <Card className={classes.questionCard}>
         <CardContent>
           <Typography
-            variant="h5"
+            variant="h6"
             component="h2"
             align="left"
             style={{ margin: "5px" }}
           >
-            Who is Prime Minister of India?
+            <ArrowForwardOutlinedIcon fontSize="small"></ArrowForwardOutlinedIcon>
+            You're at a coffe shop. The only available seat is in front of a
+            stranger
           </Typography>
           <Typography
             className={classes.pos}
             color="textSecondary"
             align="left"
-            style={{ marginLeft: "20px" }}
           >
-            Chowkidar
+            You're at a coffe shop. The only available seat is in front of a
+            stranger
           </Typography>
           <FormControl component="fieldset">
             <RadioGroup aria-label="question" name="question">
@@ -123,31 +137,33 @@ export default function Questions() {
         </Button>
       </Card>
 
-      <Card className={classes.questionCard} style={{ marginTop: "50px" }}>
+      <Card className={classes.questionCard}>
         <CardContent>
           <Typography
-            variant="h5"
+            variant="h6"
             component="h2"
             align="left"
             style={{ margin: "5px" }}
           >
-            Who is Prime Minister of India?
+            <ArrowForwardOutlinedIcon fontSize="small"></ArrowForwardOutlinedIcon>
+            You're at a coffe shop. The only available seat is in front of a
+            stranger
           </Typography>
           <Typography
             className={classes.pos}
             color="textSecondary"
             align="left"
-            style={{ marginLeft: "20px" }}
           >
-            Chowkidar
+            You're at a coffe shop. The only available seat is in front of a
+            stranger
           </Typography>
-          <FormControl component="fieldset" style={{ alignItems: "left" }}>
+          <FormControl component="fieldset">
             <TextField
               required
               multiline
-              label="Ans"
+              label="Answer"
               variant="outlined"
-              style={{ width: 500 }}
+              style={{ width: 500, marginTop: "10px" }}
             />
           </FormControl>
         </CardContent>
