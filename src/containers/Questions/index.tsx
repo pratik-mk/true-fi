@@ -97,6 +97,29 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
           "_id": "60e40dbb1663465e68f320e1",
           "name": "Borrower"
         }
+      },
+      {
+        "_id": "60e4390d7dc77d3861c477f4",
+        "responseOptions": null,
+        "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras auctor viverra tincidunt. ",
+        "questionNote": "Aliquam blandit bibendum faucibus. Suspendisse suscipit dictum purus ac finibus. ",
+        "isLive": true,
+        "parentQuestion": null,
+        "parentQuestionOption": null,
+        "isOptionBasedQuestion": false,
+        "weight": {
+          "_id": "60e40d9b1663465e68f320e0",
+          "name": "Important",
+          "value": 45
+        },
+        "category": {
+          "_id": "60e3057f4408504eead0e0f4",
+          "name": "Borrower"
+        },
+        "respondent": {
+          "_id": "60e40dbb1663465e68f320e1",
+          "name": "Borrower"
+        }
       }
     ] as unknown as QuestionsResponseInterface[]
 

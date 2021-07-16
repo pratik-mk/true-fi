@@ -10,8 +10,10 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  TextField,
 } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
+import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import { QuestionsResponseInterface } from "../interfaces/QuestionsInterface";
 
 const useStyles = makeStyles({
@@ -20,7 +22,18 @@ const useStyles = makeStyles({
     margin: "20px",
   },
   questionCard: {
-    minWidth: 275,
+    textAlign: "left",
+    margin: "10px",
+    borderStyle: "ridge",
+    marginTop: "50px",
+  },
+  answerBorder: {
+    width: "100%",
+    borderStyle: "none",
+    backgroundColor: "#000",
+    color: "#fff",
+    opacity: 0.5,
+    margin: "2px",
   },
   bullet: {
     display: "inline-block",
@@ -32,6 +45,7 @@ const useStyles = makeStyles({
   },
   pos: {
     marginBottom: 12,
+    marginLeft: "20px",
   },
 });
 
@@ -49,35 +63,48 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
   return (
     //style={{backgroundColor: '#e8efff'}}
     <Container fixed>
-      <Card className={classes.questionCard} style={{ marginTop: "50px" }}>
+      <Card className={classes.questionCard}>
         <CardContent>
           <Typography
-            variant="h5"
+            variant="h6"
             component="h2"
             align="left"
             style={{ margin: "5px" }}
           >
+            <ArrowForwardOutlinedIcon fontSize="small" />
             {question.question}
           </Typography>
           <Typography
             className={classes.pos}
             color="textSecondary"
             align="left"
-            style={{ marginLeft: "20px" }}
           >
             {question.questionNote}
           </Typography>
           <FormControl component="fieldset">
-            <RadioGroup aria-label="question" name="question">
-              {
-                question.responseOptions.map(option =>
-                  <FormControlLabel
-                    value={option.value}
-                    control={<Radio color="primary" />}
-                    label={option.option}
-                  />)
-              }
-            </RadioGroup>
+            {
+              question.isOptionBasedQuestion &&
+              <RadioGroup aria-label="question" name="question">
+                {
+                  question.responseOptions.map(option =>
+                    <FormControlLabel
+                      value={option.value}
+                      control={<Radio color="primary" />}
+                      label={option.option}
+                    />)
+                }
+              </RadioGroup>
+            }
+            {
+              !question.isOptionBasedQuestion &&
+              <TextField
+                required
+                multiline
+                label="Answer"
+                variant="outlined"
+                style={{ width: 500, marginTop: "10px" }}
+              />
+            }
           </FormControl>
         </CardContent>
         <Button
@@ -85,7 +112,7 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
           size="small"
           style={{ float: "right", margin: "5px" }}
         >
-          <ArrowForwardIosIcon onClick={handleNext}></ArrowForwardIosIcon>
+          <ArrowForwardIosIcon onClick={handleNext} />
         </Button>
       </Card>
       {/* <Button
