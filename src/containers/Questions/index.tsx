@@ -4,26 +4,18 @@ import Typography from '@material-ui/core/Typography';
 import ReactPaginate from 'react-paginate';
 import { getQuestions } from '../../services/Api/questions';
 import { QuestionsResponseInterface } from '../../interfaces/QuestionsInterface';
+import { OptionInterface } from '../../interfaces/OptionInterface';
+import QuestionCard from '../../components/QuestionCard';
 
-type ReactPaginateProps = {
-  selected: number
+type QuestionProps = {
+
 }
 
-const Question: React.FC<ReactPaginateProps> = (props): JSX.Element => {
+const Question: React.FC<QuestionProps> = (props): JSX.Element => {
   const [offset, setOffset] = useState(0)
-  const [allQuestions, setAllQuestions] = useState([] as unknown as QuestionsResponseInterface[])
   const [perPage, setPerPage] = useState(1)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [pageCount, setPageCount] = useState(0)
-  const [question, setQuestion] = useState({
-    question: '',
-    questionNote: '',
-    options: [],
-    isOptionBasedQuestion: true
-  })
-  const [count, setCount] = useState(0)
-
-  const { selected } = props;
+  const [question, setQuestion] = useState([] as unknown as QuestionsResponseInterface[])
+  const [questionCount, setQuestionCount] = useState(1)
 
   const mockData =
     [
@@ -114,50 +106,35 @@ const Question: React.FC<ReactPaginateProps> = (props): JSX.Element => {
 
   const fetchQuestions = async (): Promise<void> => {
     try {
-      // const allQuestions = await getQuestions()
-      // const data = allQuestions.questions
+      const allQuestions = await getQuestions()
       const slice = mockData.slice(offset, offset + perPage)
       const listOfQuestions = slice.map(question => question)
-      setPageCount(Math.ceil(mockData.length / perPage))
-      setAllQuestions([...listOfQuestions]);
+      setQuestion([...listOfQuestions]);
     }
     catch (err) {
       console.log(err);
     }
   }
 
-  const handlePageClick = (selectedItem:any) => {
-    // event.preventDefault();
-    const selectedPage = selectedItem.selected;
-    const offset = selectedPage * perPage;
-    setCurrentPage(selectedPage)
-    setOffset(offset)
+  const handleNext = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setQuestionCount(prevQuestionCount => prevQuestionCount + 1)
+    const offsetCount = questionCount * perPage;
+    setOffset(offsetCount)
     fetchQuestions();
   }
 
   return (
     <Container>
       <div>
-        <Typography variant='h4'>Questions</Typography>
+        <Typography variant='h5'>Questions</Typography>
       </div>
       <div>
-        {allQuestions.map((question, index: number) => {
+        {question.map((singleQuestion, index: number) => {
           return (
-            <input type="text" value={question.question} />
+            <QuestionCard question={singleQuestion} handleNext={handleNext} />
           );
         })}
-        <ReactPaginate
-          previousLabel={"prev"}
-          nextLabel={"next"}
-          breakLabel={"..."}
-          breakClassName={"break-me"}
-          pageCount={pageCount}
-          marginPagesDisplayed={2}
-          pageRangeDisplayed={5}
-          onPageChange={handlePageClick}
-          containerClassName={"pagination"}
-          // subContainerClassName={"pages pagination"}
-          activeClassName={"active"} />
       </div>
     </Container>
   );
