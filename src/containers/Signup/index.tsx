@@ -99,7 +99,7 @@ export default function SignUp() {
     event.preventDefault();
     if (handleValidation()) {
       try {
-        const res = await signup({ name, email, password });
+        await signup({ name, email, password });
         history.push(LOGIN);
       }
       catch (err) {

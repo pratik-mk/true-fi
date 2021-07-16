@@ -14,6 +14,7 @@ import { login } from '../../services/Api/authuser';
 import { TOKEN } from '../../constants/text';
 import { setItemInLocalStorage } from '../../utils/localstorage';
 import { useHistory } from 'react-router-dom';
+import { FormHelperText } from '@material-ui/core';
 
 function Copyright() {
   return (
@@ -62,6 +63,7 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const history = useHistory();
   const { setLoggedIn } = props;
@@ -90,12 +92,13 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
           refreshToken: res.refreshToken,
           expiresIn: date.getTime()
         };
-        setLoggedIn(true);
         setItemInLocalStorage(TOKEN, JSON.stringify(tokenObj));
+        setLoggedIn(true);
         history.push(DASHBOARD);
       }
       catch (err) {
         console.log(err);
+        setFormError(err.response.data.message);
       }
     }
   };
@@ -110,6 +113,9 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
         <Typography component="h1" variant="h5">
           Sign in
         </Typography>
+        <FormHelperText component="p" error={true}>
+          {formError}
+        </FormHelperText>
         <form className={classes.form} onSubmit={handleSubmit}>
           <TextField
             value={email}
