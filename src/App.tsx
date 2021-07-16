@@ -8,6 +8,7 @@ import Header from './components/Header';
 import { LOGIN, SIGNUP, DASHBOARD } from './constants/routes';
 import { checkIfAccesstokenIsValid } from './utils';
 import Dashboard from './containers/Dashboard';
+import Questions from './components/Questions';
 
 function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
@@ -18,7 +19,10 @@ function App() {
 
   return (
     <div className="App">
-      <BrowserRouter>
+      <Header isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
+      <Questions/>
+
+      {/* <BrowserRouter>
         <Header isLoggedIn={isLoggedIn} setLoggedIn={setLoggedIn} />
         <Switch>
           <Redirect path="/" exact to={checkIfAccesstokenIsValid() ? DASHBOARD : LOGIN} />
@@ -28,7 +32,7 @@ function App() {
           <Route path={SIGNUP} exact component={SignUp} />
           <Route path={DASHBOARD} exact render={() => <Dashboard />} />
         </Switch>
-      </BrowserRouter>
+      </BrowserRouter> */}
     </div>
   );
 }
