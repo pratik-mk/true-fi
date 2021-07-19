@@ -7,7 +7,7 @@ import {
   LinearProgress,
   Box,
 } from "@material-ui/core";
-import { getQuestions } from '../../services/Api/questions';
+// import { getQuestions } from '../../services/Api/questions';
 import { QuestionsResponseInterface } from '../../interfaces/QuestionsInterface';
 import QuestionCard from '../../components/QuestionCard';
 import { OptionInterface } from '../../interfaces/OptionInterface';
@@ -53,7 +53,7 @@ const useStyles = makeStyles({
 
 const Question: React.FC<QuestionProps> = (props): JSX.Element => {
   const classes = useStyles();
-  const [allQuestions, setAllQuestions] = useState([] as unknown as QuestionsResponseInterface[])
+  // const [allQuestions, setAllQuestions] = useState([] as unknown as QuestionsResponseInterface[])
   const [currentQuestion, setCurrentQuestion] = useState({
     _id: '',
     question: '',
@@ -62,7 +62,7 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
     responseOptions: [] as unknown as OptionInterface[]
   })
   const [latestQuestionID, setlatestQuestionID] = useState('')
-  const [progress, setProgress] = React.useState(10);
+  // const [progress, setProgress] = React.useState(10);
 
   const mockData =
     [
@@ -175,8 +175,8 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
   useEffect(() => {
     const fetchQuestions = async (): Promise<void> => {
       try {
-        const allQuestions = await getQuestions()
-        setAllQuestions([...allQuestions])
+        // const allQuestions = await getQuestions()
+        // setAllQuestions([...allQuestions])
         if (!checkIfDataPresent(LATEST_QUESTION_ID)) {
           setItemInLocalStorage(LATEST_QUESTION_ID, "60e4390d7dc77d3861c477f0")
         }
@@ -201,6 +201,7 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
         responseOptions: latestQuestion.responseOptions
       })
     }
+    // eslint-disable-next-line
   }, [latestQuestionID])
 
   const handleNext = (answer: string) => {
@@ -217,7 +218,7 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
     <Container>
       <br />
       <div className={classes.progressBar}>
-        <LinearProgressWithLabel value={progress} />
+        <LinearProgressWithLabel value={10} />
       </div>
       <div className={classes.body}>
         <QuestionCard question={currentQuestion} handleNext={handleNext} />

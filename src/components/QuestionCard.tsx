@@ -1,19 +1,16 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+// import Card from "@material-ui/core/Card";
+// import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+// import Typography from "@material-ui/core/Typography";
 import {
-  Container,
-  FormControl,
-  FormControlLabel,
   FormHelperText,
-  Radio,
-  RadioGroup,
+  // Radio,
+  // RadioGroup,
   TextField,
 } from "@material-ui/core";
-import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
+// import ArrowForwardOutlinedIcon from "@material-ui/icons/ArrowForwardOutlined";
 import { submitAnswer, updateAnswer } from "../services/Api/userSubmission";
 import { OptionInterface } from "../interfaces/OptionInterface";
 
@@ -162,10 +159,10 @@ const QuestionCard: React.FC<QuestionCardProps> = ({
             {
               question.isOptionBasedQuestion &&
               question.responseOptions.map((option, index: number) => {
-                let checkedInput = false
-                if (answer === option.option) {
-                  checkedInput = true
-                }
+                // let checkedInput = false
+                // if (answer === option.option) {
+                //   checkedInput = true
+                // }
                 return <input
                   className={classes.button}
                   type="button"
