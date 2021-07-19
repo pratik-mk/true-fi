@@ -14,3 +14,10 @@ export const checkIfAccesstokenIsValid = (): boolean => {
     }
     return false;
 };
+
+export const checkIfDataPresent = (tag: string) : boolean => {
+    if(getItemFromLocalStorage(tag)) {
+        return true;
+    }
+    return false;
+}

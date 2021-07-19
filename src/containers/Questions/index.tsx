@@ -1,21 +1,68 @@
 import React, { useState, useEffect } from 'react';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
-import ReactPaginate from 'react-paginate';
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Container,
+  Typography,
+  LinearProgressProps,
+  LinearProgress,
+  Box,
+} from "@material-ui/core";
 import { getQuestions } from '../../services/Api/questions';
 import { QuestionsResponseInterface } from '../../interfaces/QuestionsInterface';
-import { OptionInterface } from '../../interfaces/OptionInterface';
 import QuestionCard from '../../components/QuestionCard';
+import { OptionInterface } from '../../interfaces/OptionInterface';
+import { checkIfDataPresent } from '../../utils';
+import { LATEST_QUESTION_ID } from '../../constants/text';
+import { setItemInLocalStorage, getItemFromLocalStorage } from '../../utils/localstorage';
 
 type QuestionProps = {
 
 }
 
+function LinearProgressWithLabel(
+  props: LinearProgressProps & { value: number }
+) {
+  return (
+    <Box display="flex" alignItems="center">
+      <Box width="100%" mr={1}>
+        <LinearProgress variant="determinate" {...props} />
+      </Box>
+      <Box minWidth={35}>
+        <Typography variant="body2" color="textSecondary">{`${Math.round(
+          props.value
+        )}%`}</Typography>
+      </Box>
+    </Box>
+  );
+}
+
+const useStyles = makeStyles({
+  progressBar: {
+    width: "100%",
+    margin: "50px",
+  },
+  body: {
+    // backgroundColor: '#7cc6fe',
+    margin: '0',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '30vh',
+  },
+});
+
 const Question: React.FC<QuestionProps> = (props): JSX.Element => {
-  const [offset, setOffset] = useState(0)
-  const [perPage, setPerPage] = useState(1)
-  const [question, setQuestion] = useState([] as unknown as QuestionsResponseInterface[])
-  const [questionCount, setQuestionCount] = useState(1)
+  const classes = useStyles();
+  const [allQuestions, setAllQuestions] = useState([] as unknown as QuestionsResponseInterface[])
+  const [currentQuestion, setCurrentQuestion] = useState({
+    _id: '',
+    question: '',
+    questionNote: '',
+    isOptionBasedQuestion: true,
+    responseOptions: [] as unknown as OptionInterface[]
+  })
+  const [latestQuestionID, setlatestQuestionID] = useState('')
+  const [progress, setProgress] = React.useState(10);
 
   const mockData =
     [
@@ -42,8 +89,8 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
             "children": []
           }
         ],
-        "question": "Who is prime minister of india?",
-        "questionNote": "Name the prime minister",
+        "question": "Sed in massa mattis, ornare lacus eu, volutpat odio. Curabitur pellentesque pretium vulputate.?",
+        "questionNote": "Donec interdum, nunc et dignissim sodales",
         "isLive": true,
         "parentQuestion": "60e4390d7dc77d3861c477f0",
         "parentQuestionOption": "No",
@@ -68,18 +115,20 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
           {
             "option": "Yes",
             "value": 1,
-            "children": []
+            "children": [
+              "60e4390d7dc77d3861c477f4"
+            ]
           },
           {
             "option": "No",
             "value": 0,
             "children": [
-              "60e438dd7dc77d3861c477ef"
+              "60e4390d7dc77d3861c477f4"
             ]
           }
         ],
-        "question": "aadfafgafare dfafe adfafjlekpaaifadf kadfaadadfk aqerqerkqawererk aadpiererlker adafd ",
-        "questionNote": "oerlkwrw;palkdlka [owrek. lwerhslke werlkwerodsk ",
+        "question": "TrueFi Repayment History?",
+        "questionNote": "Does the Borrower have repayment history with TrueFi?",
         "isLive": true,
         "parentQuestion": null,
         "parentQuestionOption": null,
@@ -101,8 +150,8 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
       {
         "_id": "60e4390d7dc77d3861c477f4",
         "responseOptions": null,
-        "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras auctor viverra tincidunt. ",
-        "questionNote": "Aliquam blandit bibendum faucibus. Suspendisse suscipit dictum purus ac finibus. ",
+        "question": "Portfolio Asset Allocation?",
+        "questionNote": "What type of assets does the Borrower invest in?",
         "isLive": true,
         "parentQuestion": null,
         "parentQuestionOption": null,
@@ -124,40 +173,54 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
     ] as unknown as QuestionsResponseInterface[]
 
   useEffect(() => {
+    const fetchQuestions = async (): Promise<void> => {
+      try {
+        const allQuestions = await getQuestions()
+        setAllQuestions([...allQuestions])
+        if (!checkIfDataPresent(LATEST_QUESTION_ID)) {
+          setItemInLocalStorage(LATEST_QUESTION_ID, "60e4390d7dc77d3861c477f0")
+        }
+        setlatestQuestionID(getItemFromLocalStorage(LATEST_QUESTION_ID))
+      }
+      catch (err) {
+        console.log(err);
+      }
+    }
+
     fetchQuestions();
   }, [])
 
-  const fetchQuestions = async (): Promise<void> => {
-    try {
-      const allQuestions = await getQuestions()
-      const slice = mockData.slice(offset, offset + perPage)
-      const listOfQuestions = slice.map(question => question)
-      setQuestion([...listOfQuestions]);
+  useEffect(() => {
+    if (latestQuestionID) {
+      const latestQuestion = mockData.filter(singleQuestion => singleQuestion._id === latestQuestionID)[0]
+      setCurrentQuestion({
+        _id: latestQuestion._id,
+        question: latestQuestion.question,
+        questionNote: latestQuestion.questionNote,
+        isOptionBasedQuestion: latestQuestion.isOptionBasedQuestion,
+        responseOptions: latestQuestion.responseOptions
+      })
     }
-    catch (err) {
-      console.log(err);
-    }
-  }
+  }, [latestQuestionID])
 
-  const handleNext = (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    setQuestionCount(prevQuestionCount => prevQuestionCount + 1)
-    const offsetCount = questionCount * perPage;
-    setOffset(offsetCount)
-    fetchQuestions();
+  const handleNext = (answer: string) => {
+    if (currentQuestion.isOptionBasedQuestion) {
+      const childrenNodes = currentQuestion.responseOptions.filter(option => option.option === answer)[0].children
+      setItemInLocalStorage(LATEST_QUESTION_ID, childrenNodes[0])
+      setlatestQuestionID(childrenNodes[0])
+    } else {
+      console.log(answer)
+    }
   }
 
   return (
     <Container>
-      <div>
-        <Typography variant='h5'>Questions</Typography>
+      <br />
+      <div className={classes.progressBar}>
+        <LinearProgressWithLabel value={progress} />
       </div>
-      <div>
-        {question.map((singleQuestion, index: number) => {
-          return (
-            <QuestionCard question={singleQuestion} handleNext={handleNext} />
-          );
-        })}
+      <div className={classes.body}>
+        <QuestionCard question={currentQuestion} handleNext={handleNext} />
       </div>
     </Container>
   );

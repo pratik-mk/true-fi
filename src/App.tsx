@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 
@@ -14,7 +14,7 @@ function App() {
   const [isLoggedIn, setLoggedIn] = useState(false);
 
   useEffect(() => {
-      setLoggedIn(checkIfAccesstokenIsValid());
+    setLoggedIn(checkIfAccesstokenIsValid());
   }, []);
 
   return (
@@ -33,6 +33,7 @@ function App() {
               <Route path={DASHBOARD} exact render={() => <Dashboard />} />
             </div>
           )}
+          <Redirect path='**' to={checkIfAccesstokenIsValid() ? DASHBOARD : LOGIN} />
         </Switch>
       </BrowserRouter>
     </div>

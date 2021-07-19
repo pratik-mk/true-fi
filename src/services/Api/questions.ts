@@ -19,3 +19,17 @@ export const getQuestions = (): Promise<QuestionsResponseInterface[]> => {
     }
   });
 }
+
+export const getQuestionByID = (id: string): Promise<QuestionsResponseInterface> => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const res = await axios.get(`questions/${id}`);
+      resolve(
+        (res.data as { question: QuestionsResponseInterface }).question
+      );
+    }
+    catch (err) {
+      reject(err)
+    }
+  })
+}

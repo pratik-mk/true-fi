@@ -2,7 +2,7 @@ import { AppBar, Button, IconButton, makeStyles, Toolbar, Typography } from "@ma
 //import MenuIcon from '@material-ui/icons/Menu';
 import { useHistory } from 'react-router-dom';
 import { LOGIN } from "../constants/routes";
-import { TOKEN } from "../constants/text";
+import { TOKEN, LATEST_QUESTION_ID } from "../constants/text";
 import { logout } from "../services/Api/authuser"
 import { removeItemFromLocalStorage } from "../utils/localstorage";
 import logo from '../assets/logo.svg'
@@ -40,6 +40,7 @@ const Header: React.FC<HeaderProps> = (props): JSX.Element => {
     }
     finally {
       removeItemFromLocalStorage(TOKEN);
+      removeItemFromLocalStorage(LATEST_QUESTION_ID);
       setLoggedIn(false);
       history.push(LOGIN);
     }
