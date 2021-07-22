@@ -196,7 +196,7 @@ export default function SignUp() {
       },
       {
         value: registrationData.primaryTelegramHandle,
-        type: 'url',
+        type: 'text',
         label: 'Telegram Handle',
         required: true,
         name: 'primaryTelegramHandle',
@@ -274,7 +274,7 @@ export default function SignUp() {
       },
       {
         value: registrationData.alternateTelegramHandle,
-        type: 'url',
+        type: 'text',
         label: 'Telegram Handle',
         required: false,
         name: 'alternateTelegramHandle',
