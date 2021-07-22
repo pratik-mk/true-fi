@@ -9,7 +9,7 @@ import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-// import { signup } from '../../services/Api/authuser';
+import { signup } from '../../services/Api/authuser';
 import { LOGIN } from '../../constants/routes';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -463,13 +463,87 @@ export default function SignUp() {
     }
   }
 
+  const prepareDataObj = () => {
+    const dataObj: any = {
+      firstName: registrationData['primaryFirstName'],
+      lastName: registrationData['primaryLastName'],
+      email: registrationData['primaryEmail'],
+      password: registrationData['password'],
+      mobileNumber: registrationData['primaryMobileNo'],
+      companyInformation: {
+        entityName: registrationData['borrowerEntityName'],
+        country: registrationData['borrowerCountry'],
+      },
+    };
+    if (registrationData['primaryTelegramHandle']) {
+      dataObj.telegramHandle = registrationData['primaryTelegramHandle'];
+    }
+    if (registrationData['primaryLinkedInProfile']) {
+      dataObj.linkedInHandle = registrationData['primaryLinkedInProfile'];
+    }
+
+    //alternate contact
+    if (
+      registrationData['alternateFirstName'] ||
+      registrationData['alternateLastName'] ||
+      registrationData['alternateEmail'] ||
+      registrationData['alternateMobileNo'] ||
+      registrationData['alternateTelegramHandle'] ||
+      registrationData['alternateLinkedInProfile']
+    ) {
+      dataObj.alternateContact = {} as any;
+      if (registrationData['alternateFirstName']) {
+        dataObj.alternateContact.firstName = registrationData['alternateFirstName'];
+      }
+      if (registrationData['alternateLastName']) {
+        dataObj.alternateContact.lastName = registrationData['alternateLastName'];
+      }
+      if (registrationData['alternateEmail']) {
+        dataObj.alternateContact.email = registrationData['alternateEmail'];
+      }
+      if (registrationData['alternateMobileNo']) {
+        dataObj.alternateContact.mobileNumber = registrationData['alternateMobileNo'];
+      }
+      if (registrationData['alternateTelegramHandle']) {
+        dataObj.alternateContact.telegramHandle = registrationData['alternateTelegramHandle'];
+      }
+      if (registrationData['alternateLinkedInProfile']) {
+        dataObj.alternateContact.linkedInHandle = registrationData['alternateLinkedInProfile'];
+      }
+    } else {
+      dataObj.alternateContact = null
+    }
+
+    if (registrationData['borrowerCountry']) {
+      dataObj.companyInformation.tradeName = registrationData['borrowerCountry'];
+    }
+    if (registrationData['ethAddress']) {
+      dataObj.companyInformation.ethAddress = registrationData['ethAddress'];
+    }
+    if (registrationData['industry']) {
+      dataObj.companyInformation.industry = registrationData['industry'];
+    }
+    if (registrationData['website']) {
+      dataObj.companyInformation.website = registrationData['website'];
+    }
+    if (registrationData['linkedInProfile']) {
+      dataObj.companyInformation.linkedInProfile = registrationData['linkedInProfile'];
+    }
+    if (registrationData['twitterProfile']) {
+      dataObj.companyInformation.twitterProfile = registrationData['twitterProfile'];
+    }
+
+    return dataObj
+  }
+
   const handleSubmit = async (event: React.SyntheticEvent): Promise<void> => {
     event.preventDefault();
     if (handleValidation()) {
       if (activeStep === tabs.length - 1) {
         dispatch(showLoading());
+        const dataObj = prepareDataObj();
         try {
-          // await signup({ name, email, password });
+          await signup(dataObj);
           dispatch(hideLoading());
           history.push(LOGIN);
         }
