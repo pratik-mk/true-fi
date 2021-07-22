@@ -3,24 +3,25 @@ import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
 import Box from '@material-ui/core/Box';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { DASHBOARD, SIGNUP } from '../../constants/routes';
+import { PROFILE, SIGNUP } from '../../constants/routes';
 import { login } from '../../services/Api/authuser';
 import { TOKEN } from '../../constants/text';
 import { setItemInLocalStorage } from '../../utils/localstorage';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import { FormHelperText } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
+import { showLoading, hideLoading } from '../../reducers/loaderSlice';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link to={"https://material-ui.com/"} style={{textDecoration:'none', color: 'rgba(0, 0, 0, 0.54)'}}>
         TrueFi
       </Link>{' '}
       {new Date().getFullYear()}
@@ -52,6 +53,16 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  link: {
+    textDecoration: 'none',
+    color: '#3f51b5',
+    '&:active': {
+      color: '#3f51b5',
+    },
+    '&:hover': {
+      textDecoration: 'underline',
+    }
+  },
 }));
 
 type LoginProps = {
@@ -66,6 +77,8 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
   const [formError, setFormError] = useState('');
 
   const history = useHistory();
+  const dispatch = useDispatch();
+  
   const { setLoggedIn } = props;
 
   const handleValidation = () => {
@@ -83,6 +96,7 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
   const handleSubmit = async (event: React.SyntheticEvent): Promise<void> => {
     event.preventDefault();
     if (handleValidation()) {
+      dispatch(showLoading());
       try {
         const res = await login({ email, password });
         let date = new Date();
@@ -94,11 +108,13 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
         };
         setItemInLocalStorage(TOKEN, JSON.stringify(tokenObj));
         setLoggedIn(true);
-        history.push(DASHBOARD);
+        dispatch(hideLoading())
+        history.push(PROFILE);
       }
       catch (err) {
         console.log(err);
         setFormError(err.response.data.message);
+        dispatch(hideLoading())
       }
     }
   };
@@ -155,7 +171,7 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
           >
             Sign In
           </Button>
-          <Link href={SIGNUP} variant="body2">
+          <Link to={SIGNUP} className={classes.link}>
             {"Don't have an account? Sign Up"}
           </Link>
         </form>

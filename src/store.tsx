@@ -3,8 +3,10 @@ import loaderReducer from './reducers/loaderSlice'
 
 const store = configureStore({
   reducer: {
-    reminder: loaderReducer,
+    loader: loaderReducer,
   },
 })
+
+export type rootState = ReturnType<typeof store.getState>;
 
 export default store;

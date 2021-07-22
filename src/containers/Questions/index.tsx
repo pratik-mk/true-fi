@@ -201,7 +201,7 @@ const Question: React.FC<QuestionProps> = (props): JSX.Element => {
         responseOptions: latestQuestion.responseOptions
       })
     }
-    // eslint-disable-next-line
+  // eslint-disable-next-line
   }, [latestQuestionID])
 
   const handleNext = (answer: string) => {

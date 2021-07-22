@@ -1,12 +1,28 @@
 import React from 'react';
-import Link from '@material-ui/core/Link';
+import { Link } from 'react-router-dom';
 import { QUESTIONS } from '../../constants/routes';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles((theme) => ({
+  link: {
+    textDecoration: 'none',
+    color: '#3f51b5',
+    '&:active': {
+      color: '#3f51b5',
+    },
+    '&:hover': {
+      textDecoration: 'underline',
+    }
+  },
+}));
 
 function Dashboard() {
+  const classes = useStyles();
+  
   return (
     <div>
       <br />
-      <Link href={QUESTIONS} variant="h6">
+      <Link to={QUESTIONS} className={classes.link}>
         {"Submit Assessment"}
       </Link>
     </div>
