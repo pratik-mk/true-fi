@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
+// import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 
 import TwitterIcon from "@material-ui/icons/Twitter";
@@ -243,7 +243,7 @@ export default function Dashboard() {
                   {rows.map((row) => (
                     <TableRow key={row.srno}>
                       <TableCell component="th" scope="row">
-                        {row.srno}
+                        Submission {row.srno}
                       </TableCell>
                       <TableCell align="right">{row.date}</TableCell>
                       <TableCell align="right">{row.score}</TableCell>
