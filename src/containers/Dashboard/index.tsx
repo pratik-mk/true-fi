@@ -3,33 +3,36 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import TelegramIcon from "@material-ui/icons/Telegram";
-import LinkedInIcon from "@material-ui/icons/LinkedIn";
+
 import TwitterIcon from "@material-ui/icons/Twitter";
+import LinkedInIcon from "@material-ui/icons/LinkedIn";
+import TelegramIcon from "@material-ui/icons/Telegram";
 import LanguageIcon from "@material-ui/icons/Language";
 import {
-  Avatar,
   Box,
+  Button,
   CardHeader,
-  Grid,
-  TableContainer,
+  Paper,
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
-  Paper,
 } from "@material-ui/core";
-import { QUESTIONS } from "../../constants/routes";
 
 const useStyles = makeStyles({
   root: {
-    minWidth: 275,
+    minWidth: 350,
   },
-  cardStyle: {
-    margin: "50px",
+  cardTable: {
+    display: "flex",
+    justifyContent: "center",
+  },
+  bullet: {
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
   },
   title: {
     fontSize: 14,
@@ -37,85 +40,190 @@ const useStyles = makeStyles({
   pos: {
     marginBottom: 12,
   },
-  btn: {
-    margin: "90px 0 40px 0",
-  },
   table: {
     maxWidth: 500,
     maxHeight: 200,
   },
+  cardHead: {
+    backgroundColor: "#3f51b5",
+    color: "white",
+  },
 });
-function createData(srno: number, date: string) {
-  return { srno, date };
-}
-
-const rows = [
-  createData(1, "22-07-2021"),
-  createData(2, "22-07-2021"),
-  createData(3, "22-07-2021"),
-  createData(4, "22-07-2021"),
-];
 
 export default function Dashboard() {
   const classes = useStyles();
+  function createData(srno: string, date: string, score: number) {
+    return { srno, date, score };
+  }
+
+  const rows = [
+    createData("#1", "22-07-2021", 10),
+    createData("#2", "22-07-2021", 11),
+    createData("#3", "22-07-2021", 12),
+    createData("#4", "22-07-2021", 13),
+  ];
+
   return (
-    <Grid container style={{ marginTop: "200px" }} justify="center">
-      <Grid xs={12} md={4}>
-        <Card className={classes.cardStyle} variant="outlined">
-          <CardHeader
-            title="Profile"
-            style={{ backgroundColor: "#3f51b5", color: "white" }}
-          ></CardHeader>
+    <div>
+      <div>
+        <Card
+          style={{
+            minWidth: 400,
+            display: "inline-block",
+            minHeight: 350,
+            marginTop: "50px",
+          }}
+        >
+          <CardHeader title="Primary Profile"></CardHeader>
           <CardContent>
-            <Box
-              sx={{
-                alignItems: "center",
-                display: "flex",
-                flexDirection: "column",
-              }}
-            >
-              <Avatar style={{ width: "75px", height: "75px" }} />
-              <Typography color="textPrimary" gutterBottom variant="h4">
-                User Name
-              </Typography>
-              <Typography color="textSecondary" variant="body1">
-                user@deqode.com
-              </Typography>
-              <Typography color="textSecondary" variant="body1">
-                <strong>Eth :</strong>
-                0xAb5801a7D398351b8bE11C439e05C5B3259aeC9B
-              </Typography>
-              <Box>
-                <LanguageIcon></LanguageIcon>&emsp;&emsp;
-                <TelegramIcon></TelegramIcon>&emsp;&emsp;
-                <LinkedInIcon></LinkedInIcon>&emsp;&emsp;
-                <TwitterIcon></TwitterIcon>
-              </Box>
+            <Box>
+              <strong>First Name :</strong> User
             </Box>
+            <hr />
+            <Box>
+              <strong>Last Name :</strong> name
+            </Box>
+            <hr />
+            <Box>
+              <strong>Email Address :</strong> user@user.com
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <TelegramIcon />
+              </strong>{" "}
+              @Username
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <LinkedInIcon />
+                Linkedin Profile :
+              </strong>{" "}
+              User name
+            </Box>
+            <hr />
           </CardContent>
-        </Card>
-      </Grid>
-      <Grid xs={12} md={4}>
-        <Card variant="outlined" className={classes.cardStyle}>
-          <CardContent>
-            <Button
-              variant="contained"
-              className={classes.btn}
-              color="primary"
-              href={QUESTIONS}
-            >
-              New Submission
+          <CardActions style={{ justifyContent: "center" }}>
+            <Button variant="contained" color="primary">
+              Edit
             </Button>
-          </CardContent>
+          </CardActions>
         </Card>
-      </Grid>
-      <Grid xs={12} md={4}>
-        <Card variant="outlined" className={classes.cardStyle}>
-          <CardHeader
-            title="History"
-            style={{ backgroundColor: "#3f51b5", color: "white" }}
-          ></CardHeader>
-          <CardContent style={{ display: "flex", justifyContent: "center" }}>
+        <Card
+          style={{
+            minWidth: 400,
+            display: "inline-block",
+            minHeight: 350,
+            marginTop: "50px",
+          }}
+        >
+          {" "}
+          <CardHeader title="Alternate Profile"></CardHeader>
+          <CardContent>
+            <Box>
+              <strong>First Name :</strong> User
+            </Box>
+            <hr />
+            <Box>
+              <strong>Last Name :</strong> name
+            </Box>
+            <hr />
+            <Box>
+              <strong>Email Address :</strong> user@user.com
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <TelegramIcon />
+              </strong>{" "}
+              @Username
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <LinkedInIcon />
+                Linkedin Profile :
+              </strong>{" "}
+              User name
+            </Box>
+            <hr />
+          </CardContent>
+          <CardActions style={{ justifyContent: "center" }}>
+            <Button variant="contained" color="primary">
+              Edit
+            </Button>
+          </CardActions>
+        </Card>
+        <Card
+          style={{
+            minWidth: 400,
+            display: "inline-block",
+            minHeight: 350,
+            marginTop: "50px",
+          }}
+        >
+          <CardHeader title="Company Information"></CardHeader>
+          <CardContent>
+            <Box>
+              <strong>Borrower Entity Name :</strong> User
+            </Box>
+            <hr />
+            <Box>
+              <strong>Trade Name/DBA :</strong> name
+            </Box>
+            <hr />
+            <Box>
+              <strong>Borrower Country :</strong> user@user.com
+            </Box>
+            <hr />
+            <Box>
+              <strong>ETH Address</strong> @Username
+            </Box>
+            <hr />
+            <Box>
+              <strong>Industry :</strong> User name
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <LanguageIcon />
+                Website :
+              </strong>{" "}
+              User name
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <LinkedInIcon />
+                LinkedIn Profile :
+              </strong>{" "}
+              User name
+            </Box>
+            <hr />
+            <Box>
+              <strong>
+                <TwitterIcon /> Twitter Profile :
+              </strong>{" "}
+              User name
+            </Box>
+            <hr />
+          </CardContent>
+          <CardActions style={{ justifyContent: "center" }}>
+            <Button variant="contained" color="primary">
+              Edit
+            </Button>
+          </CardActions>
+        </Card>
+      </div>
+      <div>
+        <Card
+          style={{
+            minWidth: " 500px",
+            display: "inline-block",
+          }}
+        >
+          <CardContent className={classes.cardTable}>
             <TableContainer component={Paper} className={classes.table}>
               <Table aria-label="simple table">
                 <TableHead>
@@ -126,6 +234,9 @@ export default function Dashboard() {
                     <TableCell align="right">
                       <strong>Date</strong>
                     </TableCell>
+                    <TableCell align="right">
+                      <strong>Score</strong>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -135,6 +246,7 @@ export default function Dashboard() {
                         {row.srno}
                       </TableCell>
                       <TableCell align="right">{row.date}</TableCell>
+                      <TableCell align="right">{row.score}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -142,7 +254,7 @@ export default function Dashboard() {
             </TableContainer>
           </CardContent>
         </Card>
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 }
