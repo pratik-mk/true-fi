@@ -670,9 +670,12 @@ const Dashboard = () => {
                 type="submit"
                 variant="contained"
                 color="primary"
-                style={{ marginRight: "0px" }}
+                style={{ marginRight: "40px" }}
               >
                 {activeStep === tabs.length - 1 ? "Sign Up" : "Next"}
+              </Button>
+              <Button type="submit" variant="contained" color="primary">
+                Edit
               </Button>
             </div>
           </form>
