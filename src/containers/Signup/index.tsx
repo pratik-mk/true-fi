@@ -631,7 +631,7 @@ export default function SignUp() {
             </Button>
           </div>
           <Link to={LOGIN} className={classes.link}>
-            {"Already have an account? Sign in"}
+            Already have an account? Sign in
           </Link>
         </form>
       </div>
