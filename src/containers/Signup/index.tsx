@@ -14,7 +14,7 @@ import { LOGIN } from '../../constants/routes';
 import { useHistory, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { hideLoading, showLoading } from '../../reducers/loaderSlice';
-import { Step, StepLabel, Stepper, Tooltip } from '@material-ui/core';
+import { Step, StepLabel, Stepper } from '@material-ui/core';
 import { LooseObjectInterface } from '../../interfaces/LooseObjectInterface';
 import { SignUpDataInterface, SignUpErrorDataInterface, SignUpHelperTextDataInterface } from '../../interfaces/SignupInterface';
 
@@ -162,7 +162,6 @@ export default function SignUp() {
         label: 'First Name',
         required: true,
         name: 'primaryFirstName',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -171,7 +170,6 @@ export default function SignUp() {
         label: 'Last Name',
         required: true,
         name: 'primaryLastName',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -180,7 +178,6 @@ export default function SignUp() {
         label: 'Email Address',
         required: true,
         name: 'primaryEmail',
-        needTooltip: false,
         errorFlag: errorFields.primaryEmailError,
         helperText: helperTextFields.primaryEmailHelperText
       },
@@ -190,17 +187,15 @@ export default function SignUp() {
         label: 'Mobile Number',
         required: true,
         name: 'primaryMobileNo',
-        needTooltip: false,
         errorFlag: errorFields.primaryMobileNoError,
         helperText: helperTextFields.primaryMobileNoHelperText
       },
       {
         value: registrationData.primaryTelegramHandle,
-        type: 'url',
+        type: 'text',
         label: 'Telegram Handle',
         required: true,
         name: 'primaryTelegramHandle',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -209,7 +204,6 @@ export default function SignUp() {
         label: 'LinkedIn Profile',
         required: true,
         name: 'primaryLinkedInProfile',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -218,7 +212,6 @@ export default function SignUp() {
         label: 'Password',
         required: true,
         name: 'password',
-        needTooltip: false,
         errorFlag: errorFields.passwordError,
         helperText: helperTextFields.passwordHelperText
       },
@@ -228,7 +221,6 @@ export default function SignUp() {
         label: 'Confirm Password',
         required: true,
         name: 'confirmPassword',
-        needTooltip: false,
         errorFlag: errorFields.confirmPasswordError,
         helperText: helperTextFields.confirmPasswordHelperText
       },
@@ -240,7 +232,6 @@ export default function SignUp() {
         label: 'First Name',
         required: false,
         name: 'alternateFirstName',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -249,7 +240,6 @@ export default function SignUp() {
         label: 'Last Name',
         required: false,
         name: 'alternateLastName',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -258,7 +248,6 @@ export default function SignUp() {
         label: 'Email Address',
         required: false,
         name: 'alternateEmail',
-        needTooltip: false,
         errorFlag: errorFields.alternateEmailError,
         helperText: helperTextFields.alternateEmailHelperText
       },
@@ -268,7 +257,6 @@ export default function SignUp() {
         label: 'Mobile Number',
         required: false,
         name: 'alternateMobileNo',
-        needTooltip: false,
         errorFlag: errorFields.alternateMobileNoError,
         helperText: helperTextFields.alternateMobileNoHelperText
       },
@@ -278,7 +266,6 @@ export default function SignUp() {
         label: 'Telegram Handle',
         required: false,
         name: 'alternateTelegramHandle',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -287,7 +274,6 @@ export default function SignUp() {
         label: 'LinkedIn Profile',
         required: false,
         name: 'alternateLinkedInProfile',
-        needTooltip: false,
         errorFlag: false,
       }
     ],
@@ -298,7 +284,6 @@ export default function SignUp() {
         label: 'Borrower Entity Name',
         required: true,
         name: 'borrowerEntityName',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -307,8 +292,6 @@ export default function SignUp() {
         label: 'Trade Name/DBA',
         required: false,
         name: 'tradeName',
-        needTooltip: true,
-        toolTipNote: "Informal business name  for commercial purposes.",
         errorFlag: false,
       },
       {
@@ -317,8 +300,6 @@ export default function SignUp() {
         label: 'Borrower Country',
         required: true,
         name: 'borrowerCountry',
-        needTooltip: true,
-        toolTipNote: "This field is not editable, it is populated by response from question in the attestation.",
         errorFlag: false,
       },
       {
@@ -327,8 +308,6 @@ export default function SignUp() {
         label: 'ETH Address',
         required: false,
         name: 'ethAddress',
-        needTooltip: true,
-        toolTipNote: "ETH Address associated with your on-chain credit score. Please note changing this address may negatively impact your credit score.",
         errorFlag: false,
       },
       {
@@ -337,8 +316,6 @@ export default function SignUp() {
         label: 'Industry',
         required: false,
         name: 'industry',
-        needTooltip: true,
-        toolTipNote: "This field is not editable, it is populated by response from question in the attestation.",
         errorFlag: false,
       },
       {
@@ -347,7 +324,6 @@ export default function SignUp() {
         label: 'Website',
         required: false,
         name: 'website',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -356,7 +332,6 @@ export default function SignUp() {
         label: 'LinkedIn Profile',
         required: false,
         name: 'linkedInProfile',
-        needTooltip: false,
         errorFlag: false,
       },
       {
@@ -365,7 +340,6 @@ export default function SignUp() {
         label: 'Twitter Profile',
         required: false,
         name: 'twitterProfile',
-        needTooltip: false,
         errorFlag: false,
       },
     ],
@@ -589,32 +563,18 @@ export default function SignUp() {
         <form className={classes.form} onSubmit={handleSubmit}>
           {
             formFields[activeStep].map((field: any) =>
-              (field.needTooltip) ?
-                <Tooltip title={field.toolTipNote || ''}>
-                  <TextField
-                    value={field.value}
-                    type={field.type}
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, field.name)}
-                    variant="outlined"
-                    margin="normal"
-                    required={field.required}
-                    fullWidth
-                    label={field.label}
-                    className={classes.field}
-                    {...(field.errorFlag && { error: true, helperText: field.helperText })}
-                  />
-                </Tooltip> : <TextField
-                  value={field.value}
-                  type={field.type}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, field.name)}
-                  variant="outlined"
-                  margin="normal"
-                  required={field.required}
-                  fullWidth
-                  label={field.label}
-                  className={classes.field}
-                  {...(field.errorFlag && { error: true, helperText: field.helperText })}
-                />)
+              <TextField
+                value={field.value}
+                type={field.type}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, field.name)}
+                variant="outlined"
+                margin="normal"
+                required={field.required}
+                fullWidth
+                label={field.label}
+                className={classes.field}
+                {...(field.errorFlag && { error: true, helperText: field.helperText })}
+              />)
           }
           <div className={classes.submit}>
             <Button
