@@ -172,7 +172,7 @@ const Login: React.FC<LoginProps> = (props): JSX.Element => {
             Sign In
           </Button>
           <Link to={SIGNUP} className={classes.link}>
-            {"Don't have an account? Sign Up"}
+            Don't have an account? Sign Up
           </Link>
         </form>
       </div>

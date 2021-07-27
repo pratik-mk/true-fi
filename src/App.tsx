@@ -6,10 +6,11 @@ import { connect } from 'react-redux';
 import SignUp from './containers/Signup';
 import Login from './containers/Login';
 import Header from './components/Header';
-import { LOGIN, SIGNUP, PROFILE, QUESTIONS } from './constants/routes';
+import { LOGIN, SIGNUP, PROFILE, QUESTIONS, DASHBOARD } from './constants/routes';
 import { checkIfAccesstokenIsValid } from './utils';
-import Dashboard from './containers/Dashboard';
+import Profile from './containers/Profile';
 import Question from './containers/Questions';
+import Dashboard from './containers/Dashboard';
 import { rootState } from './store';
 import { showLoading, hideLoading } from './reducers/loaderSlice';
 import Loader from './components/Loader';
@@ -40,7 +41,8 @@ const App: React.FC<AppProps> = ({ isLoading, showLoading, hideLoading  }):JSX.E
           {checkIfAccesstokenIsValid() && (
             <div>
               <Route path={QUESTIONS} exact component={Question} />
-              <Route path={PROFILE} exact render={() => <Dashboard />} />
+              <Route path={PROFILE} exact render={() => <Profile />} />
+              <Route path={DASHBOARD} exact render={() => <Dashboard />} />
             </div>
           )}
           <Redirect path='**' to={checkIfAccesstokenIsValid() ? PROFILE : LOGIN} />
