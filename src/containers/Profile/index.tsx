@@ -3,8 +3,7 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import { LOGIN } from "../../constants/routes";
-import { useHistory } from "react-router-dom";
+// import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../reducers/loaderSlice";
 import {
@@ -16,7 +15,6 @@ import {
   Stepper,
   Tooltip,
   Card,
-  CardActions,
   CardContent,
   Paper,
   Table,
@@ -25,7 +23,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Typography,
   Divider,
 } from "@material-ui/core";
 import TwitterIcon from "@material-ui/icons/Twitter";
@@ -39,7 +36,7 @@ import {
   SignUpHelperTextDataInterface,
 } from "../../interfaces/SignupInterface";
 import { getUserProfile, updateUserProfile } from "../../services/Api/profile";
-import { Chart } from "react-charts";
+// import { Chart } from "react-charts";
 
 function validateEmail(email: string) {
   const re =
@@ -93,7 +90,7 @@ const Profile = () => {
   function createData(srno: number, date: string, score: number) {
     return { srno, date, score };
   }
-  const submissionDate = new Date();
+  // const submissionDate = new Date();
 
   const rows = [
     createData(1, "22-07-2021", 45),
@@ -407,7 +404,7 @@ const Profile = () => {
     ],
   ];
 
-  const history = useHistory();
+  // const history = useHistory();
   const dispatch = useDispatch();
 
   const tabs = ["Primary Contact", "Alternate Contact", "Company Information"];
@@ -425,6 +422,7 @@ const Profile = () => {
     };
 
     fetchUserProfile();
+  // eslint-disable-next-line
   }, []);
 
   const handleChange = (

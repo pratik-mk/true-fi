@@ -9,7 +9,7 @@ import TwitterIcon from "@material-ui/icons/Twitter";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import TelegramIcon from "@material-ui/icons/Telegram";
 import LanguageIcon from "@material-ui/icons/Language";
-import { getUserProfile, updateUserProfile } from '../../services/Api/profile';
+import { getUserProfile } from '../../services/Api/profile';
 import { showLoading, hideLoading } from '../../reducers/loaderSlice';
 import {
   Box,
@@ -276,7 +276,7 @@ export default function Dashboard() {
       errorFlag: false,
     },
   ]
-  const [isEdit, setIsEdit] = useState(true);
+  // const [isEdit, setIsEdit] = useState(true);
 
   const dispatch = useDispatch()
 
@@ -295,23 +295,24 @@ export default function Dashboard() {
     }
 
     fetchUserProfile();
+    // eslint-disable-next-line
   }, [])
 
-  const updateProfile = async (): Promise<void> => {
-    if (isEdit) {
-      dispatch(showLoading())
-      try {
-        // await updateUserProfile(userData);
-      }
-      catch (err) {
-        console.log(err)
-      }
-      setIsEdit(false)
-      dispatch(hideLoading())
-    } else {
-      setIsEdit(true)
-    }
-  }
+  // const updateProfile = async (): Promise<void> => {
+  //   if (isEdit) {
+  //     dispatch(showLoading())
+  //     try {
+  //       // await updateUserProfile(userData);
+  //     }
+  //     catch (err) {
+  //       console.log(err)
+  //     }
+  //     setIsEdit(false)
+  //     dispatch(hideLoading())
+  //   } else {
+  //     setIsEdit(true)
+  //   }
+  // }
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
