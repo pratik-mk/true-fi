@@ -7,7 +7,27 @@ import { LOGIN } from "../../constants/routes";
 import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { hideLoading, showLoading } from "../../reducers/loaderSlice";
-import { Box, CardHeader, Grid, Step, StepLabel, Stepper, Tooltip, Card, CardActions, CardContent } from "@material-ui/core";
+import {
+  Box,
+  CardHeader,
+  Grid,
+  Step,
+  StepLabel,
+  Stepper,
+  Tooltip,
+  Card,
+  CardActions,
+  CardContent,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Divider,
+} from "@material-ui/core";
 import TwitterIcon from "@material-ui/icons/Twitter";
 import LinkedInIcon from "@material-ui/icons/LinkedIn";
 import TelegramIcon from "@material-ui/icons/Telegram";
@@ -18,7 +38,7 @@ import {
   SignUpErrorDataInterface,
   SignUpHelperTextDataInterface,
 } from "../../interfaces/SignupInterface";
-import { getUserProfile, updateUserProfile } from '../../services/Api/profile';
+import { getUserProfile, updateUserProfile } from "../../services/Api/profile";
 import { Chart } from "react-charts";
 
 function validateEmail(email: string) {
@@ -64,61 +84,54 @@ const useStyles = makeStyles((theme) => ({
   field: {
     width: "90%",
   },
+  table: {
+    minWidth: 650,
+  },
 }));
 
 const Profile = () => {
-  const data = React.useMemo(
-    () => [
-      {
-        label: "Test",
-        data: [
-          [0, 1],
-          [1, 2],
-          [2, 4],
-          [3, 2],
-          [4, 7],
-        ],
-      },
-    ],
-    []
-  );
+  function createData(srno: number, date: string, score: number) {
+    return { srno, date, score };
+  }
+  const submissionDate = new Date();
 
-  const axes = React.useMemo(
-    () => [
-      { primary: true, type: "linear", position: "bottom" },
-      { type: "linear", position: "left" },
-    ],
-    []
-  );
+  const rows = [
+    createData(1, "22-07-2021", 45),
+    createData(2, "22-07-2021", 50),
+    createData(3, "22-07-2021", 67),
+    createData(4, "22-07-2021", 88),
+    createData(5, "22-07-2021", 90),
+  ];
+
   const classes = useStyles();
 
   const [userData, setUserData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    mobileNumber: '',
-    telegramHandle: '',
-    linkedInHandle: '',
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    mobileNumber: "",
+    telegramHandle: "",
+    linkedInHandle: "",
     alternateContact: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      mobileNumber: '',
-      telegramHandle: '',
-      linkedInHandle: '',
+      firstName: "",
+      lastName: "",
+      email: "",
+      mobileNumber: "",
+      telegramHandle: "",
+      linkedInHandle: "",
     },
     companyInformation: {
-      entityName: '',
-      tradeName: '',
-      country: '',
-      ethAddress: '',
-      industry: '',
-      website: '',
-      linkedInProfile: '',
-      twitterProfile: ''
-    }
-  } as SignupRequestInterface)
+      entityName: "",
+      tradeName: "",
+      country: "",
+      ethAddress: "",
+      industry: "",
+      website: "",
+      linkedInProfile: "",
+      twitterProfile: "",
+    },
+  } as SignupRequestInterface);
 
   const [errorFields, setErrorFields] = useState({
     // primaryFirstNameError: false,
@@ -178,30 +191,30 @@ const Profile = () => {
     [
       {
         value: userData.firstName,
-        type: 'text',
-        label: 'First Name',
+        type: "text",
+        label: "First Name",
         required: true,
-        name: 'firstName',
+        name: "firstName",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
         value: userData.lastName,
-        type: 'text',
-        label: 'Last Name',
+        type: "text",
+        label: "Last Name",
         required: true,
-        name: 'lastName',
+        name: "lastName",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
         value: userData.email,
-        type: 'email',
-        label: 'Email Address',
+        type: "email",
+        label: "Email Address",
         required: true,
-        name: 'email',
+        name: "email",
         needTooltip: false,
         errorFlag: errorFields.primaryEmailError,
         helperText: helperTextFields.primaryEmailHelperText,
@@ -209,10 +222,10 @@ const Profile = () => {
       },
       {
         value: userData.mobileNumber,
-        type: 'tel',
-        label: 'Mobile Number',
+        type: "tel",
+        label: "Mobile Number",
         required: true,
-        name: 'mobileNumber',
+        name: "mobileNumber",
         needTooltip: false,
         errorFlag: errorFields.primaryMobileNoError,
         helperText: helperTextFields.primaryMobileNoHelperText,
@@ -220,20 +233,20 @@ const Profile = () => {
       },
       {
         value: userData.telegramHandle,
-        type: 'text',
-        label: 'Telegram Handle',
+        type: "text",
+        label: "Telegram Handle",
         required: true,
-        name: 'telegramHandle',
+        name: "telegramHandle",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
         value: userData.linkedInHandle,
-        type: 'url',
-        label: 'LinkedIn Profile',
+        type: "url",
+        label: "LinkedIn Profile",
         required: true,
-        name: 'linkedInHandle',
+        name: "linkedInHandle",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
@@ -241,63 +254,63 @@ const Profile = () => {
     ],
     [
       {
-        value: userData.alternateContact.firstName || '',
-        type: 'text',
-        label: 'First Name',
+        value: userData.alternateContact.firstName || "",
+        type: "text",
+        label: "First Name",
         required: false,
-        name: 'firstName',
+        name: "firstName",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.alternateContact.lastName || '',
-        type: 'text',
-        label: 'Last Name',
+        value: userData.alternateContact.lastName || "",
+        type: "text",
+        label: "Last Name",
         required: false,
-        name: 'lastName',
+        name: "lastName",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.alternateContact.email || '',
-        type: 'email',
-        label: 'Email Address',
+        value: userData.alternateContact.email || "",
+        type: "email",
+        label: "Email Address",
         required: false,
-        name: 'email',
+        name: "email",
         needTooltip: false,
         errorFlag: errorFields.alternateEmailError,
         helperText: helperTextFields.alternateEmailHelperText,
         disabled: false,
       },
       {
-        value: userData.alternateContact.mobileNumber || '',
-        type: 'tel',
-        label: 'Mobile Number',
+        value: userData.alternateContact.mobileNumber || "",
+        type: "tel",
+        label: "Mobile Number",
         required: false,
-        name: 'mobileNumber',
+        name: "mobileNumber",
         needTooltip: false,
         errorFlag: errorFields.alternateMobileNoError,
         helperText: helperTextFields.alternateMobileNoHelperText,
         disabled: false,
       },
       {
-        value: userData.alternateContact.telegramHandle || '',
-        type: 'text',
-        label: 'Telegram Handle',
+        value: userData.alternateContact.telegramHandle || "",
+        type: "text",
+        label: "Telegram Handle",
         required: false,
-        name: 'telegramHandle',
+        name: "telegramHandle",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.alternateContact.linkedInHandle || '',
-        type: 'url',
-        label: 'LinkedIn Profile',
+        value: userData.alternateContact.linkedInHandle || "",
+        type: "url",
+        label: "LinkedIn Profile",
         required: false,
-        name: 'linkedInHandle',
+        name: "linkedInHandle",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
@@ -306,20 +319,20 @@ const Profile = () => {
     [
       {
         value: userData.companyInformation.entityName,
-        type: 'text',
-        label: 'Borrower Entity Name',
+        type: "text",
+        label: "Borrower Entity Name",
         required: true,
-        name: 'entityName',
+        name: "entityName",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.companyInformation.tradeName || '',
-        type: 'text',
-        label: 'Trade Name/DBA',
+        value: userData.companyInformation.tradeName || "",
+        type: "text",
+        label: "Trade Name/DBA",
         required: false,
-        name: 'tradeName',
+        name: "tradeName",
         needTooltip: true,
         toolTipNote: "Informal business name  for commercial purposes.",
         errorFlag: false,
@@ -327,63 +340,66 @@ const Profile = () => {
       },
       {
         value: userData.companyInformation.country,
-        type: 'text',
-        label: 'Borrower Country',
+        type: "text",
+        label: "Borrower Country",
         required: true,
-        name: 'country',
+        name: "country",
         needTooltip: true,
-        toolTipNote: "This field is not editable, it is populated by response from question in the attestation.",
+        toolTipNote:
+          "This field is not editable, it is populated by response from question in the attestation.",
         errorFlag: false,
         disabled: true,
       },
       {
-        value: userData.companyInformation.ethAddress || '',
-        type: 'text',
-        label: 'ETH Address',
+        value: userData.companyInformation.ethAddress || "",
+        type: "text",
+        label: "ETH Address",
         required: false,
-        name: 'ethAddress',
+        name: "ethAddress",
         needTooltip: true,
-        toolTipNote: "ETH Address associated with your on-chain credit score. Please note changing this address may negatively impact your credit score.",
+        toolTipNote:
+          "ETH Address associated with your on-chain credit score. Please note changing this address may negatively impact your credit score.",
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.companyInformation.industry || '',
-        type: 'text',
-        label: 'Industry',
+        value: userData.companyInformation.industry || "",
+        type: "text",
+        label: "Industry",
         required: false,
-        name: 'industry',
+        name: "industry",
         needTooltip: true,
-        toolTipNote: "This field is not editable, it is populated by response from question in the attestation.",
+        toolTipNote:
+          "This field is not editable, it is populated by response from question in the attestation.",
         errorFlag: false,
         disabled: true,
       },
       {
-        value: userData.companyInformation.website || '',
-        type: 'url',
-        label: 'Website',
+        value: userData.companyInformation.website || "",
+        type: "url",
+        label: "Website",
         required: false,
-        name: 'website',
+        name: "website",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.companyInformation.linkedInProfile || '',
-        type: 'url',
-        label: 'LinkedIn Profile',
+        value: userData.companyInformation.linkedInProfile || "",
+        type: "url",
+        label: "LinkedIn Profile",
         required: false,
-        name: 'linkedInProfile',
+        name: "linkedInProfile",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
       },
       {
-        value: userData.companyInformation.twitterProfile || '',
-        type: 'url',
-        label: 'Twitter Profile',
+        value: userData.companyInformation.twitterProfile || "",
+        type: "url",
+        label: "Twitter Profile",
         required: false,
-        name: 'twitterProfile',
+        name: "twitterProfile",
         needTooltip: false,
         errorFlag: false,
         disabled: false,
@@ -398,38 +414,37 @@ const Profile = () => {
 
   useEffect(() => {
     const fetchUserProfile = async (): Promise<void> => {
-      dispatch(showLoading())
+      dispatch(showLoading());
       try {
         const res = await getUserProfile();
-        setUserData(res)
+        setUserData(res);
+      } catch (err) {
+        console.log(err);
       }
-      catch (err) {
-        console.log(err)
-      }
-      dispatch(hideLoading())
-    }
+      dispatch(hideLoading());
+    };
 
     fetchUserProfile();
-  }, [])
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     name: string
   ) => {
-    const data = { ...userData } as unknown as LooseObjectInterface
+    const data = { ...userData } as unknown as LooseObjectInterface;
     switch (activeStep) {
       case 0:
-        data[name] = e.target.value
+        data[name] = e.target.value;
         break;
       case 1:
-        data['alternateContact'][name] = e.target.value
+        data["alternateContact"][name] = e.target.value;
         break;
       case 2:
-        data['companyInformation'][name] = e.target.value
+        data["companyInformation"][name] = e.target.value;
         break;
     }
-    setUserData({ ...(data as unknown as SignupRequestInterface) })
-  }
+    setUserData({ ...(data as unknown as SignupRequestInterface) });
+  };
 
   const handleValidation = () => {
     let validateFlag = true;
@@ -443,7 +458,8 @@ const Profile = () => {
           helperTextData["primaryEmailHelperText"] = "";
         } else {
           errorData["primaryEmailError"] = true;
-          helperTextData["primaryEmailHelperText"] = "Please enter a valid email address.";
+          helperTextData["primaryEmailHelperText"] =
+            "Please enter a valid email address.";
           validateFlag = false;
         }
 
@@ -452,7 +468,8 @@ const Profile = () => {
           helperTextData["primaryMobileNoHelperText"] = "";
         } else {
           errorData["primaryMobileNoError"] = true;
-          helperTextData["primaryMobileNoHelperText"] = "Please enter a valid mobile no.";
+          helperTextData["primaryMobileNoHelperText"] =
+            "Please enter a valid mobile no.";
           validateFlag = false;
         }
         setErrorFields({
@@ -464,7 +481,10 @@ const Profile = () => {
         return validateFlag;
 
       case 1:
-        if (userData.alternateContact.firstName && !validateEmail(userData.alternateContact.firstName)) {
+        if (
+          userData.alternateContact.firstName &&
+          !validateEmail(userData.alternateContact.firstName)
+        ) {
           errorData["alternateEmailError"] = true;
           helperTextData["alternateEmailHelperText"] =
             "Please enter a valid email address.";
@@ -474,7 +494,10 @@ const Profile = () => {
           helperTextData["alternateEmailHelperText"] = "";
         }
 
-        if (userData.alternateContact.mobileNumber && !validateMobileNo(userData.alternateContact.mobileNumber)) {
+        if (
+          userData.alternateContact.mobileNumber &&
+          !validateMobileNo(userData.alternateContact.mobileNumber)
+        ) {
           errorData["alternateMobileNoError"] = true;
           helperTextData["alternateMobileNoHelperText"] =
             "Please enter a valid mobile no.";
@@ -507,8 +530,8 @@ const Profile = () => {
           console.log(err);
           setFormError(err.response.data.message);
         }
-        setIsEdit(false)
-        setActiveStep(0)
+        setIsEdit(false);
+        setActiveStep(0);
         dispatch(hideLoading());
       } else {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -519,49 +542,32 @@ const Profile = () => {
   return (
     <Grid container style={{ padding: "50px" }}>
       <Grid item xs={12} md={6} lg={6}>
-        {
-          (isEdit) ?
-            <div className={classes.paper}>
-              <Stepper
-                activeStep={activeStep}
-                alternativeLabel
-                style={{ width: "100%" }}
-              >
-                {tabs.map((label) => (
-                  <Step key={label}>
-                    <StepLabel>{label}</StepLabel>
-                  </Step>
-                ))}
-              </Stepper>
-              <FormHelperText component="p" error={true}>
-                {formError}
-              </FormHelperText>
-              <form className={classes.form} onSubmit={handleSave}>
-                {formFields[activeStep].map((field: any) =>
-                  field.needTooltip ? (
-                    <Tooltip title={field.toolTipNote || ""}>
-                      <TextField
-                        value={field.value}
-                        type={field.type}
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, field.name)}
-                        variant="outlined"
-                        margin="normal"
-                        required={field.required}
-                        fullWidth
-                        label={field.label}
-                        disabled={field.disabled}
-                        className={classes.field}
-                        {...(field.errorFlag && {
-                          error: true,
-                          helperText: field.helperText,
-                        })}
-                      />
-                    </Tooltip>
-                  ) : (
+        {isEdit ? (
+          <div className={classes.paper}>
+            <Stepper
+              activeStep={activeStep}
+              alternativeLabel
+              style={{ width: "100%" }}
+            >
+              {tabs.map((label) => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
+            <FormHelperText component="p" error={true}>
+              {formError}
+            </FormHelperText>
+            <form className={classes.form} onSubmit={handleSave}>
+              {formFields[activeStep].map((field: any) =>
+                field.needTooltip ? (
+                  <Tooltip title={field.toolTipNote || ""}>
                     <TextField
                       value={field.value}
                       type={field.type}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleChange(e, field.name)}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        handleChange(e, field.name)
+                      }
                       variant="outlined"
                       margin="normal"
                       required={field.required}
@@ -574,169 +580,219 @@ const Profile = () => {
                         helperText: field.helperText,
                       })}
                     />
-                  )
-                )}
-                <div className={classes.submit}>
-                  <Button
-                    disabled={activeStep === 0}
-                    variant="contained"
-                    color="primary"
-                    onClick={(e) =>
-                      setActiveStep((prevActiveStep) => prevActiveStep - 1)
+                  </Tooltip>
+                ) : (
+                  <TextField
+                    value={field.value}
+                    type={field.type}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      handleChange(e, field.name)
                     }
-                    style={{ marginRight: "40px" }}
-                  >
-                    Back
-                  </Button>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    color="primary"
-                    style={{ marginRight: "40px" }}
-                  >
-                    {activeStep === tabs.length - 1 ? "Save" : "Next"}
-                  </Button>
-                </div>
-              </form>
-            </div> :
-            <div>
-              <Card
-                style={{
-                  minWidth: 400,
-                  display: "inline-block",
-                  minHeight: 350,
-                  marginTop: "20px",
-                }}
-              >
-                <CardHeader title="Primary Contact"></CardHeader>
-                <CardContent>
-                  <Box>
-                    <strong>First Name :</strong> {userData.firstName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Last Name :</strong> {userData.lastName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Email Address :</strong> {userData.email}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Email Address :</strong> {userData.mobileNumber}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><TelegramIcon /></strong>{" "}
-                    {userData.telegramHandle}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><LinkedInIcon />Linkedin Profile :</strong>{" "}
-                    {userData.linkedInHandle}
-                  </Box>
-                  <br />
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  minWidth: 400,
-                  display: "inline-block",
-                  minHeight: 350,
-                  marginTop: "20px",
-                }}
-              >
-                {" "}
-                <CardHeader title="Alternate Contact"></CardHeader>
-                <CardContent>
-                  <Box>
-                    <strong>First Name :</strong> {userData.alternateContact.firstName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Last Name :</strong> {userData.alternateContact.lastName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Email Address :</strong> {userData.alternateContact.email}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Mobile Number :</strong> {userData.alternateContact.mobileNumber}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><TelegramIcon /></strong>{" "}
-                    {userData.alternateContact.telegramHandle}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><LinkedInIcon />Linkedin Profile :</strong>{" "}
-                    {userData.alternateContact.linkedInHandle}
-                  </Box>
-                  <br />
-                </CardContent>
-              </Card>
-              <Card
-                style={{
-                  minWidth: 400,
-                  display: "inline-block",
-                  minHeight: 350,
-                  marginTop: "20px",
-                }}
-              >
-                <CardHeader title="Company Information"></CardHeader>
-                <CardContent>
-                  <Box>
-                    <strong>Borrower Entity Name :</strong> {userData.companyInformation.entityName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Trade Name/DBA :</strong> {userData.companyInformation.tradeName}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Borrower Country :</strong> {userData.companyInformation.country}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>ETH Address</strong> {userData.companyInformation.ethAddress}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong>Industry :</strong> {userData.companyInformation.industry}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><LanguageIcon />Website :</strong>{" "}
-                    {userData.companyInformation.website}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><LinkedInIcon />LinkedIn Profile :</strong>{" "}
-                    {userData.companyInformation.linkedInProfile}
-                  </Box>
-                  <br />
-                  <Box>
-                    <strong><TwitterIcon /> Twitter Profile :</strong>{" "}
-                    {userData.companyInformation.twitterProfile}
-                  </Box>
-                  <br />
-                </CardContent>
-              </Card>
-              <br />
-              <Button
-                variant="contained"
-                color="primary"
-                // style={{ marginRight: "40px" }}
-                onClick={(e) => setIsEdit(true)}
-              >
-                Edit
-              </Button>
-            </div>}
+                    variant="outlined"
+                    margin="normal"
+                    required={field.required}
+                    fullWidth
+                    label={field.label}
+                    disabled={field.disabled}
+                    className={classes.field}
+                    {...(field.errorFlag && {
+                      error: true,
+                      helperText: field.helperText,
+                    })}
+                  />
+                )
+              )}
+              <div className={classes.submit}>
+                <Button
+                  disabled={activeStep === 0}
+                  variant="contained"
+                  color="primary"
+                  onClick={(e) =>
+                    setActiveStep((prevActiveStep) => prevActiveStep - 1)
+                  }
+                  style={{ marginRight: "40px" }}
+                >
+                  Back
+                </Button>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="primary"
+                  style={{ marginRight: "40px" }}
+                >
+                  {activeStep === tabs.length - 1 ? "Save" : "Next"}
+                </Button>
+              </div>
+            </form>
+          </div>
+        ) : (
+          <div>
+            <Card>
+              <CardHeader title="Primary Profile" />
+              <CardContent>
+                <Box>
+                  <strong>First Name :</strong> {userData.firstName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Last Name :</strong> {userData.lastName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Email Address :</strong> {userData.email}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Email Address :</strong> {userData.mobileNumber}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <TelegramIcon />
+                    Telegram :
+                  </strong>{" "}
+                  {userData.telegramHandle}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <LinkedInIcon />
+                    Linkedin Profile :
+                  </strong>{" "}
+                  {userData.linkedInHandle}
+                </Box>
+              </CardContent>
+            </Card>
+            <Divider />
+            <Card>
+              <CardHeader title="Alternate Profile" />
+              <CardContent>
+                <Box>
+                  <strong>First Name :</strong>{" "}
+                  {userData.alternateContact.firstName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Last Name :</strong>{" "}
+                  {userData.alternateContact.lastName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Email Address :</strong>{" "}
+                  {userData.alternateContact.email}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Mobile Number :</strong>{" "}
+                  {userData.alternateContact.mobileNumber}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <TelegramIcon />
+                    Telegram :
+                  </strong>{" "}
+                  {userData.alternateContact.telegramHandle}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <LinkedInIcon />
+                    Linkedin Profile :
+                  </strong>{" "}
+                  {userData.alternateContact.linkedInHandle}
+                </Box>
+              </CardContent>
+            </Card>
+            <Divider />
+            <Card>
+              <CardHeader title="Company Information" />
+              <CardContent>
+                <Box>
+                  <strong>Borrower Entity Name :</strong>{" "}
+                  {userData.companyInformation.entityName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Trade Name/DBA :</strong>{" "}
+                  {userData.companyInformation.tradeName}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Borrower Country :</strong>{" "}
+                  {userData.companyInformation.country}
+                </Box>
+                <br />
+                <Box>
+                  <strong>ETH Address</strong>{" "}
+                  {userData.companyInformation.ethAddress}
+                </Box>
+                <br />
+                <Box>
+                  <strong>Industry :</strong>{" "}
+                  {userData.companyInformation.industry}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <LanguageIcon />
+                    Website :
+                  </strong>{" "}
+                  {userData.companyInformation.website}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <LinkedInIcon />
+                    LinkedIn Profile :
+                  </strong>{" "}
+                  {userData.companyInformation.linkedInProfile}
+                </Box>
+                <br />
+                <Box>
+                  <strong>
+                    <TwitterIcon /> Twitter Profile :
+                  </strong>{" "}
+                  {userData.companyInformation.twitterProfile}
+                </Box>
+              </CardContent>
+            </Card>
+            <Divider />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              // style={{ marginRight: "40px" }}
+              onClick={(e) => setIsEdit(true)}
+            >
+              Edit
+            </Button>
+          </div>
+        )}
       </Grid>
       <Grid item xs={12} md={6} lg={6}>
-        <Chart data={data} axes={axes} />
+        <TableContainer component={Paper}>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Sr.no</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Score</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.srno}>
+                  <TableCell component="th" scope="row">
+                    {row.srno}
+                  </TableCell>
+                  <TableCell>{row.date}</TableCell>
+                  <TableCell>{row.score}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </Grid>
     </Grid>
   );
